@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"../pkg/handlers"
 	"fmt"
 	gorillamux "github.com/gorilla/mux"
 	"net/http"
@@ -20,30 +21,13 @@ func main() {
 		ReadTimeout:  2 * time.Second,
 	}
 
-	router.Handle("/hello", handler{}).
-		Methods(http.MethodGet).
-		Name("hello-get")
 
-	router.Handle("/hello", handlerpost{}).
+	router.Handle("/person", handlers.HandlePost{}).
 		Methods(http.MethodPost).
-		Name("hello-post")
+		Name("add-person")
 
 	fmt.Println("server is starting")
 
 	server.ListenAndServe()
 
-}
-
-type handler struct {
-}
-
-func (handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello,handler from server method:%v \n", r.Method)
-}
-
-type handlerpost struct {
-}
-
-func (handlerpost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello,handlerpost from server method:%v \n", r.Method)
 }

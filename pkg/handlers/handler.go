@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"../models"
+	"github.com/devfest2k19/gowork/pkg/models"
 	"encoding/json"
 	"fmt"
 	"github.com/pickme-go/log"
@@ -31,7 +31,7 @@ func (HandlePost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var p models.Person
 
-	err := json.Unmarshal(data, &p)
+	err = json.Unmarshal(data, &p)
 	if err != nil {
 		log.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
