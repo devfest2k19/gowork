@@ -3,16 +3,36 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 func main() {
-	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(writer,"Hello from server\n")
+
+	mux := http.NewServeMux()
+
+	server := http.Server{
+		Addr:         ":8001",
+		Handler:      mux,
+		WriteTimeout: 2 * time.Second,
+		ReadTimeout:  2 * time.Second,
+	}
+
+	mux.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Fprintf(writer, "Hello from server\n")
 	})
 
-	fmt.Println("before the server")
+	mux.Handle("/hello2", handler{})
 
-	http.ListenAndServe(":8001",nil)
+	fmt.Println("server is starting")
 
-	fmt.Println("after the server")
+	server.ListenAndServe()
+
+}
+
+type handler struct {
+
+}
+
+func(handler)ServeHTTP( w http.ResponseWriter,r  *http.Request){
+	fmt.Fprintf(w, "Hello2 from server\n" )
 }
