@@ -1,11 +1,12 @@
-package cmd
+package main
 
 import (
-	"../pkg/handlers"
 	"fmt"
-	gorillamux "github.com/gorilla/mux"
 	"net/http"
 	"time"
+
+	"github.com/devfest2k19/gowork/pkg/handlers"
+	gorillamux "github.com/gorilla/mux"
 )
 
 func main() {
