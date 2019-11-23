@@ -2,26 +2,31 @@ package main
 
 import (
 	"fmt"
+	gorillamux "github.com/gorilla/mux"
 	"net/http"
 	"time"
 )
 
 func main() {
 
-	mux := http.NewServeMux()
+	router := gorillamux.NewRouter()
+
+	//mux := http.NewServeMux()
 
 	server := http.Server{
 		Addr:         ":8001",
-		Handler:      mux,
+		Handler:      router,
 		WriteTimeout: 2 * time.Second,
 		ReadTimeout:  2 * time.Second,
 	}
 
-	mux.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(writer, "Hello from server\n")
-	})
+	router.Handle("/hello", handler{}).
+		Methods(http.MethodGet).
+		Name("hello-get")
 
-	mux.Handle("/hello2", handler{})
+	router.Handle("/hello", handlerpost{}).
+		Methods(http.MethodPost).
+		Name("hello-post")
 
 	fmt.Println("server is starting")
 
@@ -30,9 +35,15 @@ func main() {
 }
 
 type handler struct {
-
 }
 
-func(handler)ServeHTTP( w http.ResponseWriter,r  *http.Request){
-	fmt.Fprintf(w, "Hello2 from server\n" )
+func (handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello,handler from server method:%v \n", r.Method)
+}
+
+type handlerpost struct {
+}
+
+func (handlerpost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello,handlerpost from server method:%v \n", r.Method)
 }
