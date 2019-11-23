@@ -1,0 +1,5 @@
+wget https://dl.grafana.com/oss/release/grafana-6.4.4.linux-amd64.tar.gz
+
+tar -zxvf grafana-6.4.4.linux-amd64.tar.gz
+
+bin/grafana-server &
